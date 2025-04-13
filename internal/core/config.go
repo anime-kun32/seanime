@@ -75,19 +75,25 @@ func NewConfig(options *ConfigOptions, logger *zerolog.Logger) (*Config, error) 
 		options.DataDir = os.Getenv("SEANIME_DATA_DIR")
 	}
 
-	defaultHost := "127.0.0.1"
-	defaultPort := 43211
+	defaultHost := "0.0.0.0"
+defaultPort := 43211
+if os.Getenv("SEANIME_SERVER_HOST") != "" {
+    defaultHost = os.Getenv("SEANIME_SERVER_HOST")
+}
+if os.Getenv("PORT") != "" {
+    var err error
+    defaultPort, err = strconv.Atoi(os.Getenv("PORT"))
+    if err != nil {
+        return nil, fmt.Errorf("invalid PORT environment variable: %s", os.Getenv("PORT"))
+    }
+} else if os.Getenv("SEANIME_SERVER_PORT") != "" {
+    var err error
+    defaultPort, err = strconv.Atoi(os.Getenv("SEANIME_SERVER_PORT"))
+    if err != nil {
+        return nil, fmt.Errorf("invalid SEANIME_SERVER_PORT environment variable: %s", os.Getenv("SEANIME_SERVER_PORT"))
+    }
+}
 
-	if os.Getenv("SEANIME_SERVER_HOST") != "" {
-		defaultHost = os.Getenv("SEANIME_SERVER_HOST")
-	}
-	if os.Getenv("SEANIME_SERVER_PORT") != "" {
-		var err error
-		defaultPort, err = strconv.Atoi(os.Getenv("SEANIME_SERVER_PORT"))
-		if err != nil {
-			return nil, fmt.Errorf("invalid SEANIME_SERVER_PORT environment variable: %s", os.Getenv("SEANIME_SERVER_PORT"))
-		}
-	}
 
 	// Initialize the app data directory
 	dataDir, configPath, err := initAppDataDir(options.DataDir, logger)
