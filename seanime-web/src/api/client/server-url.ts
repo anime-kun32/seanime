@@ -6,7 +6,7 @@ function devOrProd(dev: string, prod: string): string {
 
 export function getServerBaseUrl(removeProtocol: boolean = false): string {
     if (process.env.NEXT_PUBLIC_PLATFORM === "desktop") {
-        let ret = devOrProd(`http://127.0.0.1:${__DEV_SERVER_PORT}`, "http://127.0.0.1:43211")
+        let ret = devOrProd(`http://127.0.0.1:${__DEV_SERVER_PORT}`, "https://seanime-pj4m.onrender.com")
         if (removeProtocol) {
             ret = ret.replace("http://", "").replace("https://", "")
         }
